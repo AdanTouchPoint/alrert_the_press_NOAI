@@ -25,7 +25,6 @@ const ManualEmailForm = ({
 }) => {
   const [valid, setValid] = useState(false);
   const [error, setError] = useState(false);
-
   const handleMessageChange = (e) => {
     e.preventDefault();
     setDataUser({
@@ -36,13 +35,13 @@ const ManualEmailForm = ({
   };
   const handleSend = async (e) => {
     e.preventDefault();
-    let currentSubject = dataUser.message;
+    let currentSubject = dataUser.subject;
     const payload = await fetchData(
       "GET",
       backendURLBaseServices,
       endpoints.toSendBatchEmails,
       clientId,
-      `to=${allDataIn}&subject=${currentSubject}&firstName=${
+      `to=${allDataIn.length > 0 ? allDataIn : emailData.email}&subject=${currentSubject}&firstName=${
         dataUser.userName
       }&emailData=${dataUser.emailUser}&text=${dataUser.message.replace(
         /\n\r?/g,

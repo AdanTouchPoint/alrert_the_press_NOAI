@@ -1,6 +1,7 @@
 "use client"
 import React, {useState, useEffect} from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { fetchEmailData } from "./assets/petitions/fetchEmailData";
 import MainForm from "./components/MainForm";
 import LoadingMainForm from './components/LoadingMainForm';
 import { fetchTweet } from './assets/petitions/fetchTweet';
@@ -27,6 +28,7 @@ function Home() {
       const [backendURLBaseServices] = useState(`${process.env.NEXT_PUBLIC_URL_SERVICES}`)
       const [clientId] = useState(`${process.env.NEXT_PUBLIC_CLIENT_ID}`)
       const [endpoints] = useState({
+        toGetEmailMessage: "/email-message/",
         toSendBatchEmails:'/email-batch/',
         toGetConfs:'/confs/',
         toGetRepresentativesPerStates:'/representatives-state/',
@@ -86,6 +88,14 @@ function Home() {
 
         async function fetchData() {
           await Promise.all([
+            fetchEmailData(
+              "GET",
+              backendURLBase,
+              endpoints.toGetEmailMessage,
+              clientId,
+              "",
+              setDataUser
+            ),
             fetchConfig('GET', backendURLBase, endpoints.toGetConfs, clientId, setConfigurations),
             fetchAllLeads('GET', backendURLBase, endpoints.toGetAllLeads, clientId, setLeads),
             fetchMainContent('GET', backendURLBase, endpoints.toGetMainData, clientId, '', setMainData, setFormFields),
